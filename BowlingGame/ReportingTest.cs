@@ -110,7 +110,7 @@ namespace BowlingGame
                 Console.WriteLine(kv.TestName);
             }
 
-            if (names != null && !names.ToString().StartsWith("ВАШИ ФАМИЛИИ",
+            if (names != null && !names.ToString().StartsWith("Кузьминов Котляров",
                     StringComparison.InvariantCultureIgnoreCase))
             {
                 using (var client = Firebase.CreateClient())
