@@ -11,7 +11,7 @@ namespace TagsCloudVisualization
 	class CircularCloudLayouter : ITagCloudLayouter
 	{
 		public Point Center { get; }
-		private List<Rectangle> rectangles;
+		public List<Rectangle> Rectangles { get; }
 		private int widthSum;
 		private ISpiral spiral;
 
@@ -20,7 +20,7 @@ namespace TagsCloudVisualization
 			if (center.X < 0 || center.Y < 0)
 				throw new ArgumentOutOfRangeException("Center coordinates should be non-negative numbers");
 			Center = center;
-			rectangles = new List<Rectangle>();
+			Rectangles = new List<Rectangle>();
 			spiral = new ArchimedianSpiral(size: 1, center: center);
 		}
 
@@ -34,7 +34,7 @@ namespace TagsCloudVisualization
 				newRectangleLocation = spiral.GetNextPoint();
 
 			var rectangle = new Rectangle(newRectangleLocation, rectangleSize);
-			rectangles.Add(rectangle);
+			Rectangles.Add(rectangle);
 			return rectangle;
 		}
 
@@ -51,7 +51,7 @@ namespace TagsCloudVisualization
 		private bool IsRectangleAt(Point p, Size size)
 		{
 			var rectToPlace = new Rectangle(p, size);
-			return rectangles.Any(r => r.IntersectsWith(rectToPlace));
+			return Rectangles.Any(r => r.IntersectsWith(rectToPlace));
 		}
 	}
 }

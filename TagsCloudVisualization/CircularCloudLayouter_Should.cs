@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework.Interfaces;
 
 namespace TagsCloudVisualization
 {
@@ -11,6 +14,7 @@ namespace TagsCloudVisualization
 	class CircularCloudLayouter_Should
 	{
 		private CircularCloudLayouter layouter;
+		private List<Rectangle> rectangles;
 
 		[SetUp]
 		public void SetUp()
@@ -58,21 +62,12 @@ namespace TagsCloudVisualization
 		}
 
 		[Test]
-		public void a()
-		{
-			var spiral = new ArchimedianSpiral();
-			var points = new List<Point>();
-			for(int i = 0; i <=360; i++) points.Add(spiral.GetNextPoint());
-			{ }
-		}
-
-		[Test]
 		public void LayouterShould_PutRectanglesInDenseCloud()
 		{
 			int width = 200;
 			int height = 50;
 			int repeatCount = 100;
-			var sizes = Enumerable.Repeat(new Size(width, height) , repeatCount).ToArray();
+			var sizes = Enumerable.Repeat(new Size(width, height), repeatCount).ToArray();
 
 			var rectangles = sizes.Select(size => layouter.PutNextRectangle(size));
 
@@ -91,6 +86,20 @@ namespace TagsCloudVisualization
 			rectangles.Should().NotContain(rectangle => rectangle.X < 0 || rectangle.Y < 0);
 		}
 
+		[TearDown]
+		public void TearDown()
+		{
+			if (TestContext.CurrentContext.Result.Outcome.Equals(ResultState.Failure))
+			{
+				var path = Path.Combine(Environment.CurrentDirectory, "Log", TestContext.CurrentContext.Test.Name + ".jpg");
+				var image = Visualisation.GetVisualisation(layouter.Rectangles);
+				image.Save(path, ImageFormat.Jpeg);
+				Console.WriteLine($"Tag cloud visualization saved to file {path}");
+			}
+		}
+
+
+
 		static CircularCloudLayouter CreateLayouter(int x, int y)
 		{
 			return new CircularCloudLayouter(new Point(x, y));
@@ -103,7 +112,7 @@ namespace TagsCloudVisualization
 				from rectangle2 in rectangles
 				where rectangle1 != rectangle2
 				where rectangle1.IntersectsWith(rectangle2)
-				select rectangle1).Any();
+				select true).Any();
 		}
 	}
 }
