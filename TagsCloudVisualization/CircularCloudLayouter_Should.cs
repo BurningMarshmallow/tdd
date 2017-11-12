@@ -14,7 +14,7 @@ namespace TagsCloudVisualization
 	class CircularCloudLayouter_Should
 	{
 		private CircularCloudLayouter layouter;
-		private List<Rectangle> rectangles;
+		private List<Rectangle> rectangles; // Не используется!
 
 		[SetUp]
 		public void SetUp()
@@ -64,14 +64,14 @@ namespace TagsCloudVisualization
 		[Test]
 		public void LayouterShould_PutRectanglesInDenseCloud()
 		{
-			int width = 200;
+			int width = 200; // выделенные переменные намекают на обобщение в TestCase, заодно можно и на разных repeatCount убедиться, что работает
 			int height = 50;
 			int repeatCount = 100;
 			var sizes = Enumerable.Repeat(new Size(width, height), repeatCount).ToArray();
 
 			var rectangles = sizes.Select(size => layouter.PutNextRectangle(size));
 
-			(rectangles.Max(r => r.X) - rectangles.Min(r => r.X)).Should().BeLessThan(width * (repeatCount));
+			(rectangles.Max(r => r.X) - rectangles.Min(r => r.X)).Should().BeLessThan(width * (repeatCount)); // Грубое ограниче
 			(rectangles.Max(r => r.Y) - rectangles.Min(r => r.Y)).Should().BeLessThan(height * (repeatCount));
 		}
 
@@ -92,27 +92,27 @@ namespace TagsCloudVisualization
 			if (TestContext.CurrentContext.Result.Outcome.Equals(ResultState.Failure))
 			{
 				var path = Path.Combine(Environment.CurrentDirectory, "Log", TestContext.CurrentContext.Test.Name + ".jpg");
-				var image = Visualisation.GetVisualisation(layouter.Rectangles);
+				var image = Visualisation.GetVisualisation(layouter.Rectangles); // Visualization
 				image.Save(path, ImageFormat.Jpeg);
 				Console.WriteLine($"Tag cloud visualization saved to file {path}");
 			}
 		}
 
+		// Отступы зачем? :)
 
-
-		static CircularCloudLayouter CreateLayouter(int x, int y)
+		static CircularCloudLayouter CreateLayouter(int x, int y) // to private
 		{
 			return new CircularCloudLayouter(new Point(x, y));
 		}
 
-		static bool AreIntersectedRectangles(IEnumerable<Rectangle> rectangles)
+		static bool AreIntersectedRectangles(IEnumerable<Rectangle> rectangles) // to private
 		{
 			return (
 				from rectangle1 in rectangles
 				from rectangle2 in rectangles
 				where rectangle1 != rectangle2
 				where rectangle1.IntersectsWith(rectangle2)
-				select true).Any();
+				select true).Any(); // Так как приходит всегда массив (только 1 использование), можно было бы проверять только неупорядоченные пары(i < j) - стандартная оптимизация :)
 		}
 	}
 }

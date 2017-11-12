@@ -1,10 +1,11 @@
 ﻿using System;
-using static System.Math;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Math;
+
 
 namespace TagsCloudVisualization
 {
@@ -30,12 +31,12 @@ namespace TagsCloudVisualization
 			return nextPoint;
 		}
 
-		public void Reset()
+		public void Reset() // Не используется!
 		{
 			currentAngle = 0;
 		}
 
-		static Point GetCartensianCoordinates(double polarRadius, double polarAngle)
+		static Point GetCartensianCoordinates(double polarRadius, double polarAngle) // Опечатка в названии метода. Чтобы такого избегать, можно пользоваться различными плагинами, например для Resharper есть Respeller
 		{
 			return new Point(
 				(int) (polarRadius * Cos(polarRadius)),

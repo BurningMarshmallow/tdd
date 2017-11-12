@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace TagsCloudVisualization
 {
-	static class Program
+	static class Program // Здесь лучше проставить явно public
 	{
-		static void Main()
+		static void Main() // И здесь
 		{
 			var cloud1 = GetRandomCloudImage(100);
 			var cloud2 = GetRandomCloudImage(200);;
@@ -31,7 +31,7 @@ namespace TagsCloudVisualization
 
 		public static Bitmap GetRandomCloudImage(int rectanglesAmount)
 		{
-			return Visualisation.GetVisualisation(GetRandomCloud(rectanglesAmount));
+			return Visualization.GetVisualisation(GetRandomCloud(rectanglesAmount)); // Теперь называется Visualization (в методе и .csproj надо тоже поправить)
 		}
 	}
 }

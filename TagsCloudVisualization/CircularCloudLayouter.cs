@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; // Не используется, можно спокойно убрать (в других файлах аналогично)
 
 namespace TagsCloudVisualization
 {
-	class CircularCloudLayouter : ITagCloudLayouter
+	class CircularCloudLayouter : ITagCloudLayouter // to public
 	{
 		public Point Center { get; }
 		public List<Rectangle> Rectangles { get; }
-		private int widthSum;
-		private ISpiral spiral;
+		private int widthSum; // Не используется!
+		private ISpiral spiral; // Можно сделать readonly, так как сама спираль не пересоздаётся
 
 		public CircularCloudLayouter(Point center)
 		{
@@ -21,7 +21,8 @@ namespace TagsCloudVisualization
 				throw new ArgumentOutOfRangeException("Center coordinates should be non-negative numbers");
 			Center = center;
 			Rectangles = new List<Rectangle>();
-			spiral = new ArchimedianSpiral(size: 1, center: center);
+			spiral = new ArchimedianSpiral(size: 1, center: center); // Лучше поставить angleShift последним аргументом,
+																	 // тогда тут можно будет использовать значения без указания аргументов
 		}
 
 		public Rectangle PutNextRectangle(Size rectangleSize)
@@ -43,14 +44,14 @@ namespace TagsCloudVisualization
 			return PutNextRectangle(new Size(width, heigth));
 		}
 
-		private bool RectangleCanBePlacedAt(Point p, Size size)
+		private bool RectangleCanBePlacedAt(Point p, Size size) // В начале методов обычно идёт глагол => CanRectangleBePlacedAt
 		{
 			return (p.X >= 0 && p.Y >= 0 && !IsRectangleAt(p, size));
 		}
 
 		private bool IsRectangleAt(Point p, Size size)
 		{
-			var rectToPlace = new Rectangle(p, size);
+			var rectToPlace = new Rectangle(p, size); // Можно не экономить на буквах, и назвать rectangleToPlace :)
 			return Rectangles.Any(r => r.IntersectsWith(rectToPlace));
 		}
 	}
